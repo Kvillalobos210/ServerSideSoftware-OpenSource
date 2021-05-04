@@ -34,6 +34,8 @@ public class Employee implements Serializable {
     private int cellphone;
     @Column(name = "email", nullable = true, length = 50)
     private String email;
+    @Column(name = "username", nullable = true, length = 50)
+    private String username;
     @Column(name="password",nullable = false, length = 15)
     private String password;
     @Column(name="birthday",nullable = false)

@@ -25,6 +25,8 @@ public class Customer implements Serializable{
     private String dni;
     @Column(name = "email", nullable = false, length = 60)
     private String email;
+    @Column(name = "username", nullable = false, length = 60)
+    private String username;
     @Column(name = "password", nullable = false, length = 20)
     private String password;
     @Column(name = "city", nullable = false, length = 20)
