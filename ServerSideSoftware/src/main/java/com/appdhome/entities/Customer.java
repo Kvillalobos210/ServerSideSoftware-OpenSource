@@ -25,10 +25,14 @@ public class Customer implements Serializable{
     private String dni;
     @Column(name = "email", nullable = false, length = 60)
     private String email;
-    @Column(name = "username", nullable = false, length = 60)
-    private String username;
-    @Column(name = "password", nullable = false, length = 20)
-    private String password;
-    @Column(name = "city", nullable = false, length = 20)
-    private String city;
+    @Column(name = "cellphone", nullable = false, length = 9)
+    private String cellphone;
+    @Column(name="paymentMethod", nullable = false)
+    private Long paymentMethod;
+    @Column(name="idAccount", nullable = false)
+    private Long idAccount;
+    @Column(name="idCity", nullable = false)
+    private Long idCity;
+    @Column(name="idDistrict", nullable = false)
+    private Long idDistrict;
 }

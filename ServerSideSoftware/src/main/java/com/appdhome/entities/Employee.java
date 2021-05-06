@@ -28,18 +28,24 @@ public class Employee implements Serializable {
     private String lastName;
     @Column(name = "dni", nullable = false, length = 8)
     private String dni;
-    @Column(name = "address", nullable = true, length = 150)
-    private String address;
     @Column(name = "cellphone", nullable = false, length = 9)
     private int cellphone;
-    @Column(name = "email", nullable = true, length = 50)
-    private String email;
-    @Column(name = "username", nullable = true, length = 50)
-    private String username;
-    @Column(name="password",nullable = false, length = 15)
-    private String password;
     @Column(name="birthday",nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthday;
+    @Column(name = "email", nullable = true, length = 50)
+    private String email;
+    @Column(name="idSpecialty", nullable = false)
+    private Long idSpecialty;
+    @Column(name="idAccount", nullable = false)
+    private Long idAccount;
+    @Column(name="idCity", nullable = false)
+    private Long idCity;
+    @Column(name="idDistrict", nullable = false)
+    private Long idDistrict;
+
+
+
+
 
 }

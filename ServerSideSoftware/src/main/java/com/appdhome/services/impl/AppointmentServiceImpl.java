@@ -31,17 +31,22 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     @Override
     public List<Appointment> getAll() throws Exception {
-        return null;
+        return appointmentRepository.findAll();
     }
 
     @Override
     public Optional<Appointment> getById(Long id) throws Exception {
-        return Optional.empty();
+        return appointmentRepository.findById(id);
     }
 
     @Override
     public List<Appointment> findByStatus(String status) throws Exception {
-        return null;
+        return appointmentRepository.findAppointmentByStatus(status);
+    }
+
+    @Override
+    public List<Appointment> findByIdEmployee(Long idEmployee) throws Exception {
+        return appointmentRepository.findAppointmentByIdEmployee(idEmployee);
     }
 
     @Override

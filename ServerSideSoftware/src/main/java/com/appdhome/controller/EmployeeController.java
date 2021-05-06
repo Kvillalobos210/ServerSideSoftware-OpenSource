@@ -30,7 +30,7 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> findAll(){
         try{
             List<Employee> employees=employeeService.getAll();
-            System.out.println("Holaa" + employees);
+            System.out.println("Employees " + employees);
             if(employees.size()>0)
                 return new ResponseEntity<List<Employee>>(employees, HttpStatus.OK);
             else

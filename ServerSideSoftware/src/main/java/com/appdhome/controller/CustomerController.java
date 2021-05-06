@@ -32,7 +32,7 @@ public class CustomerController {
     {
         try {
             List<Customer> customers = customerService.getAll();
-            System.out.println("Customers" + customers);
+            System.out.println("Customers " + customers);
             if (customers.size() > 0)
                 return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
             else

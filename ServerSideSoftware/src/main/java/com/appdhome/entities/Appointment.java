@@ -19,9 +19,9 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="idCustomer", nullable = false)
-    private int idCustomer;
+    private Long idCustomer;
     @Column(name="idEmployee", nullable = false)
-    private int idEmployee;
+    private Long idEmployee;
     @Column(name="status", nullable = false, length = 50)
     private String status;
     @Column(name="description", nullable = false, length = 250)
@@ -34,9 +34,9 @@ public class Appointment implements Serializable {
     @Column(name="valorization", nullable = false, length = 200)
     private int valorization;
     @Column(name="paymentMethod", nullable = false, length = 200)
-    private int paymentMethod;
+    private Long paymentMethod;
     @Column(name="TypeRequest", nullable = false, length = 200)
-    private int typeRequest;
+    private Long typeRequest;
 
 
 

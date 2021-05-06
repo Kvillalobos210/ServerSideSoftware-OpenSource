@@ -1,6 +1,7 @@
 package com.appdhome.controller;
 
 import com.appdhome.entities.Appointment;
+import com.appdhome.entities.Customer;
 import com.appdhome.services.IAppointmentService;
 import com.appdhome.services.ICustomerService;
 import io.swagger.annotations.Api;
@@ -33,9 +34,10 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> findAll()
     {
         try {
-            List<Appointment> customers = appointmentService.getAll();
-            if (customers.size() > 0)
-                return new ResponseEntity<List<Appointment>>(customers, HttpStatus.OK);
+            List<Appointment> appointments = appointmentService.getAll();
+            System.out.println("Citas "+ appointments);
+            if (appointments.size() > 0)
+                return new ResponseEntity<List<Appointment>>(appointments, HttpStatus.OK);
             else
                 return new ResponseEntity<List<Appointment>>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -53,6 +55,7 @@ public class AppointmentController {
     {
         try {
             Optional<Appointment> appointment = appointmentService.getById(id);
+            System.out.println("Cita por ID " + appointment);
             if (!appointment.isPresent())
                 return new ResponseEntity<Appointment>(HttpStatus.NOT_FOUND);
             return new ResponseEntity<Appointment>(appointment.get(), HttpStatus.OK);
@@ -67,10 +70,11 @@ public class AppointmentController {
             @ApiResponse(code = 201, message = "Citas por estado encontradas"),
             @ApiResponse(code = 404, message = "Citas por estado no encontradas")
     })
-    public ResponseEntity<List<Appointment>> findById(@PathVariable("status") String status)
+    public ResponseEntity<List<Appointment>> findByStatus(@PathVariable("status") String status)
     {
         try {
             List<Appointment> appointments = appointmentService.findByStatus(status);
+            System.out.println("Citas por estado "+ appointments);
             if(appointments.size()>0)
                 return new ResponseEntity<List<Appointment>>(appointments, HttpStatus.OK);
             else
@@ -78,6 +82,63 @@ public class AppointmentController {
 
         } catch (Exception e) {
             return new ResponseEntity<List<Appointment>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/searchByIdCustomer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Buscar citas por ID Customer", notes = "Método para buscar cita por ID Customer")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Citas por estado encontradas"),
+            @ApiResponse(code = 404, message = "Citas por estado no encontradas")
+    })
+    public ResponseEntity<List<Appointment>> findByIdCustomer(@PathVariable("id") Long id)
+    {
+        try {
+            List<Appointment> appointmentsByCustomer = appointmentService.findByIdCustomer(id);
+            System.out.println("Citas por ID Customers "+ appointmentsByCustomer);
+            if(appointmentsByCustomer.size()>0)
+                return new ResponseEntity<List<Appointment>>(appointmentsByCustomer, HttpStatus.OK);
+            else
+                return new ResponseEntity<List<Appointment>>(HttpStatus.NOT_FOUND);
+
+        } catch (Exception e) {
+            return new ResponseEntity<List<Appointment>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/searchByIdEmployee/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Buscar citas por ID Employee", notes = "Método para buscar cita por ID Employee")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Citas por trabajador encontradas"),
+            @ApiResponse(code = 404, message = "Citas por trabajador no encontradas")
+    })
+    public ResponseEntity<List<Appointment>> findByIdEmployee(@PathVariable("id") Long id)
+    {
+        try {
+            List<Appointment> appointmentsByEmployee = appointmentService.findByIdEmployee(id);
+            System.out.println("Citas por ID Employee "+ appointmentsByEmployee);
+            if(appointmentsByEmployee.size()>0)
+                return new ResponseEntity<List<Appointment>>(appointmentsByEmployee, HttpStatus.OK);
+            else
+                return new ResponseEntity<List<Appointment>>(HttpStatus.NOT_FOUND);
+
+        } catch (Exception e) {
+            return new ResponseEntity<List<Appointment>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Ingreso de Citas", notes = "Método para ingresar citas")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Cita creada"),
+            @ApiResponse(code = 404, message = "Cita no creada")
+    })
+    public ResponseEntity<Appointment> insertAppointment(@RequestBody Appointment appointment){
+        try{
+            Appointment appointmentNew = appointmentService.save(appointment);
+            return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
+        }catch (Exception e){
+            return new ResponseEntity<Appointment>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -89,14 +150,14 @@ public class AppointmentController {
             @ApiResponse(code = 404, message = "Cita no encontrada")
     })
     public ResponseEntity<Appointment> updateAppointment(
-            @PathVariable("id") Long id, @RequestBody Appointment customer) {
+            @PathVariable("id") Long id, @RequestBody Appointment appointment) {
         try{
-            Optional<Appointment> customerUp = appointmentService.getById(id);
-            if(!customerUp.isPresent())
+            Optional<Appointment> appointmentUp = appointmentService.getById(id);
+            if(!appointmentUp.isPresent())
                 return new ResponseEntity<Appointment>(HttpStatus.NOT_FOUND);
-            customer.setId(id);
-            appointmentService.save(customer);
-            return new ResponseEntity<Appointment>(customer, HttpStatus.OK);
+            appointment.setId(id);
+            appointmentService.save(appointment);
+            return new ResponseEntity<Appointment>(appointment, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<Appointment>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
