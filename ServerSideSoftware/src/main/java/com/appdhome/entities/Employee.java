@@ -30,9 +30,6 @@ public class Employee implements Serializable {
     private String dni;
     @Column(name = "cellphone", nullable = false, length = 9)
     private int cellphone;
-    @Column(name="birthday",nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
     @Column(name = "email", nullable = true, length = 50)
     private String email;
     @Column(name="idSpecialty", nullable = false)

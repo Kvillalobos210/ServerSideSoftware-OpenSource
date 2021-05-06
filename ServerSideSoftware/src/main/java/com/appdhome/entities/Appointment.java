@@ -35,8 +35,7 @@ public class Appointment implements Serializable {
     private int valorization;
     @Column(name="paymentMethod", nullable = false, length = 200)
     private Long paymentMethod;
-    @Column(name="TypeRequest", nullable = false, length = 200)
-    private Long typeRequest;
+
 
 
 

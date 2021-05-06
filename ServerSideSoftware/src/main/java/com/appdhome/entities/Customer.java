@@ -27,8 +27,6 @@ public class Customer implements Serializable{
     private String email;
     @Column(name = "cellphone", nullable = false, length = 9)
     private String cellphone;
-    @Column(name="paymentMethod", nullable = false)
-    private Long paymentMethod;
     @Column(name="idAccount", nullable = false)
     private Long idAccount;
     @Column(name="idCity", nullable = false)
