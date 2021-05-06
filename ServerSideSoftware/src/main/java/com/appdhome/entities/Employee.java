@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@NamedQuery(name="Employee.findByFirstName",query="Select c from Customer c where c.firstName=?1")
+@NamedQuery(name="Employee.findByFirstName",query="Select e from Employee e where e.firstName=?1")
 
 public class Employee implements Serializable {
     @Id
