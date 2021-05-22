@@ -13,6 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NamedQuery(name = "Customer.findByFirstName", query = "select c from Customer c where c.firstName = ?1")
 
+//katyyyyyy
 public class Customer implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
