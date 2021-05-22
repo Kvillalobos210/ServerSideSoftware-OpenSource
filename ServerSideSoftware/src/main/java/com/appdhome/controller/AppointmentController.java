@@ -138,6 +138,7 @@ public class AppointmentController {
             Appointment appointmentNew = appointmentService.save(appointment);
             return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
         }catch (Exception e){
+            System.out.println("Error" + e);
             return new ResponseEntity<Appointment>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
