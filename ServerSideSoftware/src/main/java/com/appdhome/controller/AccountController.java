@@ -20,14 +20,14 @@ public class AccountController {
 		
 		if(error !=null) {
 			model.addAttribute("error","Error en el login: Nombre de usuario o contraseña incorrecto");
-			return "login";
+			return "Account";
 		}
 		
 		if(logout !=null) {
 			model.addAttribute("Success","Ha cerrado sesión correctamente");
-			return "login";
+			return "Account";
 		}
 		
-		return "login";
+		return "Account";
 	}
 }
