@@ -6,6 +6,7 @@
 
 <mat-card class="formulario">
     <mat-horizontal-stepper  #stepper>
+        
         <mat-step [stepControl]="registerForm1">
           <form [formGroup]="registerForm1">
             <ng-template matStepLabel>Usuario y Contraseña</ng-template>
@@ -38,6 +39,7 @@
             </div>
           </form>
         </mat-step>
+
         <mat-step [stepControl]="registerForm2" label="Datos Personales" *ngIf="!firstData && account.typeuser == 1">
           <form [formGroup]="registerForm2">
             <mat-form-field>
@@ -129,6 +131,7 @@
               </div>
             </form>
           </mat-step>
+
         <mat-step>
           <ng-template matStepLabel>Done</ng-template>
           <p>Confirmar Registro</p>
