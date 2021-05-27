@@ -151,7 +151,7 @@ public class CustomerController {
     @ApiOperation(value = "Actualización de datos de Customers", notes = "Método para actualizar los datos del customer")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Datos de customer actualizados"),
-            @ApiResponse(code = 404, message = "Customer no creado")
+            @ApiResponse(code = 404, message = "Datos de customer no actualizados")
     })
     public ResponseEntity<Customer> updateCustomer(
             @PathVariable("id") Long id, @RequestBody Customer customer) {
