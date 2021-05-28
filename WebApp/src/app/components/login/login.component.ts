@@ -9,7 +9,11 @@ import { Account } from '../../models/account'
 })
 export class LoginComponent implements OnInit {
 
-  account: Account = {username:'', password:''};
+  account: Account = {
+    username:'',
+    password:'',
+    typeuser:''
+  };
   loginForm: FormGroup;
   constructor(private _formBuilder : FormBuilder) { }
 
