@@ -65,7 +65,7 @@ public class CityController {
             @ApiResponse(code = 201, message = "City encontrados"),
             @ApiResponse(code = 404, message = "City no encontrados")
     })
-    public ResponseEntity<City> finByName(@PathVariable("name") String name){
+    public ResponseEntity<City> findByName(@PathVariable("name") String name){
         try {
             City city=cityService.findByName(name);
             if (city == null){
@@ -83,7 +83,7 @@ public class CityController {
             @ApiResponse(code = 201, message = "City creado"),
             @ApiResponse(code = 404, message = "City no creado")
     })
-    public ResponseEntity<City> insertDistrict(@RequestBody City city){
+    public ResponseEntity<City> insertCity(@RequestBody City city){
         try {
             City cityNew = cityService.save(city);
             return ResponseEntity.status(HttpStatus.CREATED).body(cityNew);
@@ -99,7 +99,7 @@ public class CityController {
             @ApiResponse(code = 201, message = "Datos de city actualizados"),
             @ApiResponse(code = 404, message = "Datos de city no actualizados")
     })
-    public ResponseEntity<City> updateDistrict(@PathVariable("id") Long id, @RequestBody City city){
+    public ResponseEntity<City> updateCity(@PathVariable("id") Long id, @RequestBody City city){
         try {
             Optional<City> cityUp=cityService.getById(id);
             if (!cityUp.isPresent()){
@@ -119,7 +119,7 @@ public class CityController {
             @ApiResponse(code = 200, message = "City eliminado"),
             @ApiResponse(code = 404, message = "City no encontrado")
     })
-    public ResponseEntity<City> deleteDistrict (@PathVariable("id") Long id){
+    public ResponseEntity<City> deleteCity (@PathVariable("id") Long id){
         try {
             Optional<City> cityDelete=cityService.getById(id);
             if(!cityDelete.isPresent()){

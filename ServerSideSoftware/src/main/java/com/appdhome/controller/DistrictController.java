@@ -1,6 +1,8 @@
 package com.appdhome.controller;
 
+import com.appdhome.entities.City;
 import com.appdhome.entities.District;
+import com.appdhome.services.ICityService;
 import com.appdhome.services.IDistrictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ import java.util.Optional;
 public class DistrictController {
     @Autowired
     private IDistrictService districtService;
+
+    @Autowired
+    private ICityService cityService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Lista de todos los distritos", notes = "Método para listar a todos los distritos")
@@ -77,16 +83,22 @@ public class DistrictController {
         }
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Ingreso de Distritos", notes = "Método para ingresar distritos")
+    @PostMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Registro de un distrito de una ciudad", notes ="Método que registra un distrito" )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "District creado"),
-            @ApiResponse(code = 404, message = "District no creado")
+            @ApiResponse(code=201, message = "District creado"),
+            @ApiResponse(code=404, message = "District no creado")
     })
-    public ResponseEntity<District> insertDistrict(@RequestBody District district){
-        try {
-            District districtNew = districtService.save(district);
-            return ResponseEntity.status(HttpStatus.CREATED).body(districtNew);
+    public ResponseEntity<District> insertDistrict(@PathVariable("id") Long id, @Valid @RequestBody District district){
+        try{
+            Optional<City>  city = cityService.getById(id);
+            if(city.isPresent()){
+                district.setCity(city.get());
+                District districtNew = districtService.save(district);
+                return ResponseEntity.status(HttpStatus.CREATED).body(districtNew);
+            }
+            else
+                return new ResponseEntity<District>(HttpStatus.FAILED_DEPENDENCY);
         }catch (Exception e){
             return new ResponseEntity<District>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

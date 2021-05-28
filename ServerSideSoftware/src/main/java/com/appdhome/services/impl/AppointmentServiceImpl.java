@@ -43,14 +43,14 @@ public class AppointmentServiceImpl implements IAppointmentService {
     public List<Appointment> findByStatus(String status) throws Exception {
         return appointmentRepository.findAppointmentByStatus(status);
     }
-
+ /*
     @Override
-    public List<Appointment> findByIdEmployee(Long idEmployee) throws Exception {
-        return appointmentRepository.findAppointmentByIdEmployee(idEmployee);
+    public List<Appointment> findByIdEmployee(Long id) throws Exception {
+        return appointmentRepository.findAppointmentByIdEmployee(id);
     }
 
     @Override
     public List<Appointment> findByIdCustomer(Long id) throws Exception {
         return appointmentRepository.findAppointmentByIdCustomer(id);
-    }
+    }*/
 }
