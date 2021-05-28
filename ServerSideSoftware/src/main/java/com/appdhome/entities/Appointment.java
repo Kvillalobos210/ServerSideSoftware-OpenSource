@@ -1,5 +1,6 @@
 package com.appdhome.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,7 @@ public class Appointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="idCustomer", nullable = false)
-    private Long idCustomer;
-    @Column(name="idEmployee", nullable = false)
-    private Long idEmployee;
+
     @Column(name="status", nullable = false, length = 50)
     private String status;
     @Column(name="description", nullable = false, length = 250)
@@ -36,7 +34,13 @@ public class Appointment implements Serializable {
     @Column(name="paymentMethod", nullable = false, length = 200)
     private Long paymentMethod;
 
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Customer customer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Employee employee;
 
 }

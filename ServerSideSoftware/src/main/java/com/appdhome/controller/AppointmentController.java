@@ -2,19 +2,23 @@ package com.appdhome.controller;
 
 import com.appdhome.entities.Appointment;
 import com.appdhome.entities.Customer;
+import com.appdhome.entities.Employee;
 import com.appdhome.services.IAppointmentService;
+
 import com.appdhome.services.ICustomerService;
+import com.appdhome.services.IEmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,13 @@ import java.util.Optional;
 public class AppointmentController {
     @Autowired
     private IAppointmentService appointmentService;
+
+    @Autowired
+    private ICustomerService customerService;
+
+    @Autowired
+    private IEmployeeService employeeService;
+
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Listar todas las citas", notes = "Método para listar a todas las citas")
@@ -85,7 +96,7 @@ public class AppointmentController {
         }
     }
 
-    @GetMapping(value = "/searchByIdCustomer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    /*@GetMapping(value = "/searchByIdCustomer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Buscar citas por ID Customer", notes = "Método para buscar cita por ID Customer")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Citas por estado encontradas"),
@@ -126,17 +137,25 @@ public class AppointmentController {
             return new ResponseEntity<List<Appointment>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Ingreso de Citas", notes = "Método para ingresar citas")
+ */
+    @PostMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Registro de una cita de un Customer", notes ="Método que registra una cita" )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Cita creada"),
-            @ApiResponse(code = 404, message = "Cita no creada")
+            @ApiResponse(code=201, message = "Appointment creado"),
+            @ApiResponse(code=404, message = "Appointment no creado")
     })
-    public ResponseEntity<Appointment> insertAppointment(@RequestBody Appointment appointment){
+    public ResponseEntity<Appointment> insertAppointment(@PathVariable("id") Long id, @Valid @RequestBody Appointment appointment){
         try{
-            Appointment appointmentNew = appointmentService.save(appointment);
-            return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
+            Optional<Customer> customer = customerService.getById(id);
+            Optional<Employee> employee = employeeService.getById(id);
+            if(customer.isPresent() && employee.isPresent()){
+                appointment.setCustomer(customer.get());
+                appointment.setEmployee(employee.get());
+                Appointment appointmentNew = appointmentService.save(appointment);
+                return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
+            }
+            else
+                return new ResponseEntity<Appointment>(HttpStatus.FAILED_DEPENDENCY);
         }catch (Exception e){
             return new ResponseEntity<Appointment>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

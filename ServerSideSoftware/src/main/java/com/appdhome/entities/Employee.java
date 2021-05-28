@@ -39,7 +39,6 @@ public class Employee implements Serializable {
     @Column(name="password",nullable = false, length = 15)
     private String password;
     @Column(name="birthday",nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
+    private String birthday;
 
 }

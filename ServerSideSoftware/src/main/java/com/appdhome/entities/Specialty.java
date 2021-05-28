@@ -17,5 +17,5 @@ public class Specialty implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "specialtyname", nullable = false, length = 50)
-    private String specialtyName;
+    private String name;
 }
