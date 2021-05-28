@@ -1,7 +1,9 @@
 package com.appdhome.controller;
 
 
+import com.appdhome.entities.Customer;
 import com.appdhome.entities.PaymentMethod;
+import com.appdhome.services.ICustomerService;
 import com.appdhome.services.IPaymentMethodService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,9 @@ import java.util.Optional;
 public class PaymentMethodController {
     @Autowired
     private IPaymentMethodService paymentMethodService;
+
+    @Autowired
+    private ICustomerService customerService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Lista de todas las formas de pago", notes = "Método para listar a todas las formas de pago")
@@ -62,17 +68,23 @@ public class PaymentMethodController {
 
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Ingreso de Payment Method", notes = "Método para ingresar Payment Method")
+    @PostMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Registro de un método de pago de un cliente", notes ="Método que registra un método de pago" )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Payment Method creado"),
-            @ApiResponse(code = 404, message = "Payment Method no creado")
+            @ApiResponse(code=201, message = "Payment Method creado"),
+            @ApiResponse(code=404, message = "Payment Method no creado")
     })
-    public ResponseEntity<PaymentMethod> insertPaymentMethod(@RequestBody PaymentMethod paymentMethod){
-        try {
-            PaymentMethod paymentMethodNew = paymentMethodService.save(paymentMethod);
-            return ResponseEntity.status(HttpStatus.CREATED).body(paymentMethodNew);
-        }catch (Exception e){
+    public ResponseEntity<PaymentMethod> insertPaymentMethod(@PathVariable("id") Long id, @Valid @RequestBody PaymentMethod paymentMethod){
+        try{
+            Optional<Customer> customer = customerService.getById(id);
+            if(customer.isPresent()){
+                paymentMethod.setCustomer(customer.get());
+                PaymentMethod paymentMethodNew = paymentMethodService.save(paymentMethod);
+                return ResponseEntity.status(HttpStatus.CREATED).body(paymentMethodNew);
+            }
+            else
+                return new ResponseEntity<PaymentMethod>(HttpStatus.FAILED_DEPENDENCY);
+        }catch (Exception ex){
             return new ResponseEntity<PaymentMethod>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

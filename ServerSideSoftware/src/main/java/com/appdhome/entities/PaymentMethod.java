@@ -1,5 +1,6 @@
 package com.appdhome.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,9 @@ public class PaymentMethod implements Serializable {
     private Long id;
     @Column(name = "paymentMethod_id", nullable = false, length = 50)
     private String paymentMethod;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Customer customer;
 }

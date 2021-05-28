@@ -24,4 +24,6 @@ public class District implements Serializable {
     @JoinColumn(name = "city_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private City city;
+
+
 }
