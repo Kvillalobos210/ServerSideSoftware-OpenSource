@@ -18,11 +18,13 @@ public class CityServiceImpl implements ICityService {
     private ICityRepository cityRepository;
 
     @Override
+    @Transactional
     public City save(City city) throws Exception {
         return cityRepository.save(city);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) throws Exception {
         cityRepository.deleteById(id);
     }

@@ -26,8 +26,7 @@ public class SpecialtyController {
     @Autowired
     private ISpecialtyService specialtyService;
 
-    @Autowired
-    private IEmployeeService employeeService;
+
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Lista de todas las especialidades", notes = "Método para listar a todas las especialidades")
@@ -84,23 +83,18 @@ public class SpecialtyController {
         }
     }
 
-    @PostMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Registro de una especialidad de un trabajador", notes ="Método que registra una especialidad" )
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Registro de una especialidad", notes = "Método que registra una especialidad")
     @ApiResponses({
-            @ApiResponse(code=201, message = "Specialty creada"),
-            @ApiResponse(code=404, message = "Specialty no creada")
+            @ApiResponse(code = 201, message = "Specialty creada"),
+            @ApiResponse(code = 404, message = "Specialty no creada")
     })
-    public ResponseEntity<Specialty> insertSpecialty(@PathVariable("id") Long id, @Valid @RequestBody Specialty specialty){
+    public ResponseEntity<Specialty> insertSpecialty(@RequestBody Specialty specialty){
         try{
-            Optional<Employee> employee = employeeService.getById(id);
-            if(employee.isPresent()){
-                specialty.setEmployee(employee.get());
-                Specialty specialtyNew = specialtyService.save(specialty);
-                return ResponseEntity.status(HttpStatus.CREATED).body(specialtyNew);
-            }
-            else
-                return new ResponseEntity<Specialty>(HttpStatus.FAILED_DEPENDENCY);
-        }catch (Exception ex){
+            Specialty specialtyNew = specialtyService.save(specialty);
+            return ResponseEntity.status(HttpStatus.CREATED).body(specialtyNew);
+        }catch (Exception e){
             return new ResponseEntity<Specialty>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

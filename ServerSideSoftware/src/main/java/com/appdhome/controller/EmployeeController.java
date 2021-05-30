@@ -1,7 +1,12 @@
 package com.appdhome.controller;
 
+import com.appdhome.entities.District;
 import com.appdhome.entities.Employee;
+import com.appdhome.entities.Specialty;
+import com.appdhome.services.IDistrictService;
 import com.appdhome.services.IEmployeeService;
+import com.appdhome.services.ISpecialtyService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -17,9 +22,16 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
+@Api(tags = "Employee", value = "RESTFul de Districts")
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
+
+    @Autowired
+    private ISpecialtyService specialtyService;
+
+    @Autowired
+    private IDistrictService districtService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="Listar Trabajadores",notes = "Método para listar todo los trabajadores")
@@ -124,22 +136,32 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value="Insertar trabajador",notes="Método para insertar trabajador")
-    @ApiResponses(
-            {
-                    @ApiResponse(code =200, message = "Datos de trabajador insertados"),
-                    @ApiResponse(code=404, message = "Datos de trabajador no insertados")
-            }
-    )
-    public ResponseEntity<Employee> insertEmployee(@Valid @RequestBody Employee employee){
-        try{
-            Employee employeeNew= employeeService.save(employee);
-            return ResponseEntity.status(HttpStatus.CREATED).body(employeeNew);
-        }catch (Exception e){
+    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Registro de un empleado", notes = "Método que registra un empleado y su especialidad")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Employee creado"),
+            @ApiResponse(code = 404, message = "Employee no creado")
+    })
+    public ResponseEntity<Employee> insertEmployee(@RequestParam("speciality_id") Long id1,
+                                                 @RequestParam("district_id") Long id2,
+                                                 @Valid @RequestBody Employee employee){
+        try {
+            Optional<Specialty> specialty = specialtyService.getById(id1);
+            Optional<District> district= districtService.getById(id2);
+
+            if (specialty.isPresent() &&  district.isPresent()){
+                employee.setSpecialty(specialty.get());
+                employee.setDistrict(district.get());
+                Employee employeeNew = employeeService.save(employee);
+                return ResponseEntity.status(HttpStatus.CREATED).body(employeeNew);
+            }else
+                return new ResponseEntity<Employee>(HttpStatus.FAILED_DEPENDENCY);
+        }catch (Exception ex){
             return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="Actualización de datos trabajadores",notes="Método que actualizar los datos de los trabajadores")
@@ -152,8 +174,8 @@ public class EmployeeController {
     public ResponseEntity<Employee> updateEmployee(
             @PathVariable("id") Long id, @Valid @RequestBody Employee employee) {
         try{
-            Optional<Employee> customerUp = employeeService.getById(id);
-            if(!customerUp.isPresent())
+            Optional<Employee> employeeUp = employeeService.getById(id);
+            if(!employeeUp.isPresent())
                 return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
             employee.setId(id);
             employeeService.save(employee);

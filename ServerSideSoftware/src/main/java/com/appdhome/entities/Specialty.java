@@ -20,8 +20,4 @@ public class Specialty implements Serializable{
     @Column(name = "specialtyname", nullable = false, length = 50)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Employee employee;
 }

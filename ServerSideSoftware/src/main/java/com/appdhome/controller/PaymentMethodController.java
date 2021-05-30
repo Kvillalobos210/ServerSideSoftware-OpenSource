@@ -68,23 +68,17 @@ public class PaymentMethodController {
 
 
 
-    @PostMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Registro de un método de pago de un cliente", notes ="Método que registra un método de pago" )
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Registro de método de pago", notes = "Método que registra el método de pagoD")
     @ApiResponses({
-            @ApiResponse(code=201, message = "Payment Method creado"),
-            @ApiResponse(code=404, message = "Payment Method no creado")
+            @ApiResponse(code = 201, message = "Payment Method creado"),
+            @ApiResponse(code = 404, message = "Payment Method no creado")
     })
-    public ResponseEntity<PaymentMethod> insertPaymentMethod(@PathVariable("id") Long id, @Valid @RequestBody PaymentMethod paymentMethod){
+    public ResponseEntity<PaymentMethod> insertPaymentMethod(@RequestBody PaymentMethod paymentMethod){
         try{
-            Optional<Customer> customer = customerService.getById(id);
-            if(customer.isPresent()){
-                paymentMethod.setCustomer(customer.get());
-                PaymentMethod paymentMethodNew = paymentMethodService.save(paymentMethod);
-                return ResponseEntity.status(HttpStatus.CREATED).body(paymentMethodNew);
-            }
-            else
-                return new ResponseEntity<PaymentMethod>(HttpStatus.FAILED_DEPENDENCY);
-        }catch (Exception ex){
+            PaymentMethod paymentMethodNew = paymentMethodService.save(paymentMethod);
+            return ResponseEntity.status(HttpStatus.CREATED).body(paymentMethodNew);
+        }catch (Exception e){
             return new ResponseEntity<PaymentMethod>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

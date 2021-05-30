@@ -1,7 +1,11 @@
 package com.appdhome.controller;
 
 import com.appdhome.entities.Customer;
+import com.appdhome.entities.District;
+import com.appdhome.entities.Employee;
+import com.appdhome.entities.Specialty;
 import com.appdhome.services.ICustomerService;
+import com.appdhome.services.IDistrictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +26,9 @@ import java.util.Optional;
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private IDistrictService districtService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Listar todos los clientes", notes = "Método para listar a todos los clientes")
@@ -137,11 +145,17 @@ public class CustomerController {
             @ApiResponse(code = 201, message = "Customer creado"),
             @ApiResponse(code = 404, message = "Customer no creado")
     })
-    public ResponseEntity<Customer> insertCustomer(@RequestBody Customer customer){
-        try{
-            Customer customerNew = customerService.save(customer);
-            return ResponseEntity.status(HttpStatus.CREATED).body(customerNew);
-        }catch (Exception e){
+    public ResponseEntity<Customer> insertCustomer(@RequestParam("id") Long id,
+                                                   @Valid @RequestBody Customer customer){
+        try {
+            Optional<District> district =districtService.getById(id);
+            if (district.isPresent()){
+                customer.setDistrict(district.get());
+                Customer customerNew = customerService.save(customer);
+                return ResponseEntity.status(HttpStatus.CREATED).body(customerNew);
+            }else
+                return new ResponseEntity<Customer>(HttpStatus.FAILED_DEPENDENCY);
+        }catch (Exception ex){
             return new ResponseEntity<Customer>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

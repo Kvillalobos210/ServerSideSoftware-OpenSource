@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
+
 
 @Entity
 @Table(name="employee")
@@ -40,5 +40,19 @@ public class Employee implements Serializable {
     private String password;
     @Column(name="birthday",nullable = false)
     private String birthday;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "specialty_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Specialty specialty;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private District district;
+
 
 }

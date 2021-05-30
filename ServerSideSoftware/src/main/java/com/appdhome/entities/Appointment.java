@@ -31,8 +31,7 @@ public class Appointment implements Serializable {
     private String address;
     @Column(name="valorization", nullable = false, length = 200)
     private int valorization;
-    @Column(name="paymentMethod", nullable = false, length = 200)
-    private Long paymentMethod;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
@@ -42,5 +41,9 @@ public class Appointment implements Serializable {
     @JoinColumn(name = "employee_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Employee employee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paymentMethod_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private PaymentMethod paymentMethod;
 
 }

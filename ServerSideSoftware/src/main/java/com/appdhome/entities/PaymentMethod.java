@@ -20,8 +20,5 @@ public class PaymentMethod implements Serializable {
     @Column(name = "paymentMethod_id", nullable = false, length = 50)
     private String paymentMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Customer customer;
+
 }

@@ -3,10 +3,12 @@ package com.appdhome.controller;
 import com.appdhome.entities.Appointment;
 import com.appdhome.entities.Customer;
 import com.appdhome.entities.Employee;
+import com.appdhome.entities.PaymentMethod;
 import com.appdhome.services.IAppointmentService;
 
 import com.appdhome.services.ICustomerService;
 import com.appdhome.services.IEmployeeService;
+import com.appdhome.services.IPaymentMethodService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -34,6 +36,9 @@ public class AppointmentController {
 
     @Autowired
     private IEmployeeService employeeService;
+
+    @Autowired
+    private IPaymentMethodService paymentMethodService;
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -144,13 +149,15 @@ public class AppointmentController {
             @ApiResponse(code=201, message = "Appointment creado"),
             @ApiResponse(code=404, message = "Appointment no creado")
     })
-    public ResponseEntity<Appointment> insertAppointment(@PathVariable("id") Long id, @Valid @RequestBody Appointment appointment){
+    public ResponseEntity<Appointment> insertAppointment(@RequestParam("id_customer") Long id1,@RequestParam("id_employee") Long id2,@RequestParam("id_paymentMethod") Long id3, @Valid @RequestBody Appointment appointment){
         try{
-            Optional<Customer> customer = customerService.getById(id);
-            Optional<Employee> employee = employeeService.getById(id);
-            if(customer.isPresent() && employee.isPresent()){
+            Optional<Customer> customer = customerService.getById(id1);
+            Optional<Employee> employee = employeeService.getById(id2);
+            Optional<PaymentMethod> paymentMethod=paymentMethodService.getById(id3);
+            if(customer.isPresent() && employee.isPresent() && paymentMethod.isPresent()){
                 appointment.setCustomer(customer.get());
                 appointment.setEmployee(employee.get());
+                appointment.setPaymentMethod(paymentMethod.get());
                 Appointment appointmentNew = appointmentService.save(appointment);
                 return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
             }

@@ -1,4 +1,5 @@
 package com.appdhome.entities;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,9 @@ public class Customer implements Serializable{
     private String username;
     @Column(name = "password", nullable = false, length = 20)
     private String password;
-    @Column(name = "city", nullable = false, length = 20)
-    private String city;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private District district;
 }
