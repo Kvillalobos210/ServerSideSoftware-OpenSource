@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/appointments")
 @Api(tags="Appointment", value = "RESTFul de Appointments")
@@ -101,7 +102,7 @@ public class AppointmentController {
         }
     }
 
-    /*@GetMapping(value = "/searchByIdCustomer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/searchByIdCustomer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Buscar citas por ID Customer", notes = "Método para buscar cita por ID Customer")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Citas por estado encontradas"),
@@ -142,7 +143,7 @@ public class AppointmentController {
             return new ResponseEntity<List<Appointment>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- */
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Registro de una cita de un Customer", notes ="Método que registra una cita" )
     @ApiResponses({
