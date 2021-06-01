@@ -145,16 +145,10 @@ public class CustomerController {
             @ApiResponse(code = 201, message = "Customer creado"),
             @ApiResponse(code = 404, message = "Customer no creado")
     })
-    public ResponseEntity<Customer> insertCustomer(@RequestParam("id") Long id,
-                                                   @Valid @RequestBody Customer customer){
+    public ResponseEntity<Customer> insertCustomer(@Valid @RequestBody Customer customer){
         try {
-            Optional<District> district =districtService.getById(id);
-            if (district.isPresent()){
-                customer.setDistrict(district.get());
-                Customer customerNew = customerService.save(customer);
-                return ResponseEntity.status(HttpStatus.CREATED).body(customerNew);
-            }else
-                return new ResponseEntity<Customer>(HttpStatus.FAILED_DEPENDENCY);
+            Customer customerNew = customerService.save(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body(customerNew);
         }catch (Exception ex){
             return new ResponseEntity<Customer>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

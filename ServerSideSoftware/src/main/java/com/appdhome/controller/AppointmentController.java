@@ -143,26 +143,17 @@ public class AppointmentController {
         }
     }
  */
-    @PostMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Registro de una cita de un Customer", notes ="Método que registra una cita" )
     @ApiResponses({
             @ApiResponse(code=201, message = "Appointment creado"),
             @ApiResponse(code=404, message = "Appointment no creado")
     })
-    public ResponseEntity<Appointment> insertAppointment(@RequestParam("id_customer") Long id1,@RequestParam("id_employee") Long id2,@RequestParam("id_paymentMethod") Long id3, @Valid @RequestBody Appointment appointment){
+    public ResponseEntity<Appointment> insertAppointment(@Valid @RequestBody Appointment appointment){
         try{
-            Optional<Customer> customer = customerService.getById(id1);
-            Optional<Employee> employee = employeeService.getById(id2);
-            Optional<PaymentMethod> paymentMethod=paymentMethodService.getById(id3);
-            if(customer.isPresent() && employee.isPresent() && paymentMethod.isPresent()){
-                appointment.setCustomer(customer.get());
-                appointment.setEmployee(employee.get());
-                appointment.setPaymentMethod(paymentMethod.get());
-                Appointment appointmentNew = appointmentService.save(appointment);
-                return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
-            }
-            else
-                return new ResponseEntity<Appointment>(HttpStatus.FAILED_DEPENDENCY);
+            Appointment appointmentNew = appointmentService.save(appointment);
+            return ResponseEntity.status(HttpStatus.CREATED).body(appointmentNew);
+
         }catch (Exception e){
             return new ResponseEntity<Appointment>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

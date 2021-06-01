@@ -136,27 +136,16 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Registro de un empleado", notes = "Método que registra un empleado y su especialidad")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Employee creado"),
             @ApiResponse(code = 404, message = "Employee no creado")
     })
-    public ResponseEntity<Employee> insertEmployee(@RequestParam("speciality_id") Long id1,
-                                                 @RequestParam("district_id") Long id2,
-                                                 @Valid @RequestBody Employee employee){
+    public ResponseEntity<Employee> insertEmployee(@Valid @RequestBody Employee employee){
         try {
-            Optional<Specialty> specialty = specialtyService.getById(id1);
-            Optional<District> district= districtService.getById(id2);
-
-            if (specialty.isPresent() &&  district.isPresent()){
-                employee.setSpecialty(specialty.get());
-                employee.setDistrict(district.get());
-                Employee employeeNew = employeeService.save(employee);
-                return ResponseEntity.status(HttpStatus.CREATED).body(employeeNew);
-            }else
-                return new ResponseEntity<Employee>(HttpStatus.FAILED_DEPENDENCY);
+            Employee employeeNew = employeeService.save(employee);
+            return ResponseEntity.status(HttpStatus.CREATED).body(employeeNew);
         }catch (Exception ex){
             return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
