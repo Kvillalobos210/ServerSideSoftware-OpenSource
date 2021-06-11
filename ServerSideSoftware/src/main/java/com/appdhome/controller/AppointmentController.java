@@ -32,14 +32,6 @@ public class AppointmentController {
     @Autowired
     private IAppointmentService appointmentService;
 
-    @Autowired
-    private ICustomerService customerService;
-
-    @Autowired
-    private IEmployeeService employeeService;
-
-    @Autowired
-    private IPaymentMethodService paymentMethodService;
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -200,3 +192,14 @@ public class AppointmentController {
         }
     }
 }
+
+/*
+* @Autowired
+    private ICustomerService customerService;
+
+    @Autowired
+    private IEmployeeService employeeService;
+
+    @Autowired
+    private IPaymentMethodService paymentMethodService;
+* */
