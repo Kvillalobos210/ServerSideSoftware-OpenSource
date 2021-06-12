@@ -28,20 +28,24 @@ public class Employee implements Serializable {
     private String lastName;
     @Column(name = "dni", nullable = false, length = 8)
     private String dni;
-    @Column(name = "address", nullable = true, length = 150)
-    private String address;
+    //@Column(name = "address", nullable = true, length = 150)
+    //private String address;
     @Column(name = "cellphone", nullable = false, length = 9)
-    private int cellphone;
-    @Column(name = "email", nullable = true, length = 50)
+    private String cellphone;
+    @Column(name = "email", nullable = true, length = 50, unique = true)
     private String email;
-    @Column(name = "username", nullable = true, length = 50)
-    private String username;
-    @Column(name="password",nullable = false, length = 15)
-    private String password;
+    //@Column(name = "username", nullable = true, length = 50)
+    //private String username;
+    //@Column(name="password",nullable = false, length = 15)
+    //private String password;
     @Column(name="birthday",nullable = false)
     private String birthday;
 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "specialty_id", nullable = false)

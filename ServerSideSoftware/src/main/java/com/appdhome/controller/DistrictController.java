@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/ditricts")
+@RequestMapping("/api/districts")
 @Api(tags = "District", value = "RESTFul de Districts")
 public class DistrictController {
     @Autowired
@@ -63,6 +63,22 @@ public class DistrictController {
             return new ResponseEntity<District>(district.get(),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<District>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "getDistrictsByCity/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Buscar distrito por id de la ciudad", notes = "Método para encontrar un distrito por id de la ciudad")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "District encontrado"),
+            @ApiResponse(code = 404, message = "District no encontrado")
+    })
+    public ResponseEntity<List<District>> findDistrictByIdCity(@PathVariable("id") Long id){
+        try{
+            List<District> districts =districtService.findByIDCity(id);
+            return new ResponseEntity<List<District>>(districts,HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<List<District>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

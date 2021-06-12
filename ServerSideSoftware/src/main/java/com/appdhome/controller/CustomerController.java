@@ -6,6 +6,7 @@ import com.appdhome.entities.Employee;
 import com.appdhome.entities.Specialty;
 import com.appdhome.services.ICustomerService;
 import com.appdhome.services.IDistrictService;
+import com.appdhome.util.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -152,6 +154,27 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CREATED).body(customerNew);
         }catch (Exception ex){
             return new ResponseEntity<Customer>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping( value = "/validateEmail",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Validar correo de customer", notes = "Validar corre de customer")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Valid Email"),
+            @ApiResponse(code = 404, message = "Invalid Email")
+    })
+    public ResponseEntity<?> validateEmailCustomer(@Valid @RequestBody Customer customer){
+        try {
+            System.out.println("email" + customer);
+            Optional<Customer> customerEmail = customerService.findByEmail(customer.getEmail());
+            if(!customerEmail.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            Response res = new Response();
+            res.setMsj("El email ya existe");
+            return new ResponseEntity<>(res,HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -24,12 +24,21 @@ public class Customer implements Serializable{
     private String lastName;
     @Column(name = "dni", nullable = false, length = 8)
     private String dni;
-    @Column(name = "email", nullable = false, length = 60)
+    @Column(name = "email", nullable = false, length = 60, unique = true)
     private String email;
+    @Column(name = "cellphone", nullable = false, length = 60)
+    private String cellphone;
+    /*
     @Column(name = "username", nullable = false, length = 60)
     private String username;
     @Column(name = "password", nullable = false, length = 20)
     private String password;
+    */
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id", nullable = false)

@@ -6,6 +6,7 @@ import com.appdhome.entities.Specialty;
 import com.appdhome.services.IDistrictService;
 import com.appdhome.services.IEmployeeService;
 import com.appdhome.services.ISpecialtyService;
+import com.appdhome.util.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -147,6 +148,26 @@ public class EmployeeController {
         try {
             Employee employeeNew = employeeService.save(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body(employeeNew);
+        }catch (Exception ex){
+            return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping( value = "/validateEmail",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Validar correo de employee", notes = "Validar corre de employee")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Valid Email"),
+            @ApiResponse(code = 404, message = "Invalid Email")
+    })
+    public ResponseEntity<?> validateEmailEmployee(@Valid @RequestBody Employee employee){
+        try {
+            Optional<Employee> employeeEmail = employeeService.findByEmail(employee.getEmail());
+            if(!employeeEmail.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            Response res = new Response();
+            res.setMsj("El email ya existe");
+            return new ResponseEntity<>(res,HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

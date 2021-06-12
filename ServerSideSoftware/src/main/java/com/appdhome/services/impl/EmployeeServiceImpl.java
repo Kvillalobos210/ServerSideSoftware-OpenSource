@@ -60,4 +60,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employeeRepository.findByFirstName(firstname);
     }
 
+    @Override
+    public Optional<Employee> findByEmail(String email) throws Exception {
+        return employeeRepository.findByEmail(email);
+    }
+
 }

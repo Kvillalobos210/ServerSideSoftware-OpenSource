@@ -57,4 +57,9 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.findByDni(dni);
     }
 
+    @Override
+    public Optional<Customer> findByEmail(String email) throws Exception {
+        return customerRepository.findByEmail(email);
+    }
+
 }

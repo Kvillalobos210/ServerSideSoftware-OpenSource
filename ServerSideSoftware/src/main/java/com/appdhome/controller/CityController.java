@@ -60,6 +60,8 @@ public class CityController {
         }
     }
 
+
+
     @GetMapping(value = "/searchName/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Buscar ciudad por su nombre", notes = "Método para encontrar ciudades por su nombre")
     @ApiResponses({

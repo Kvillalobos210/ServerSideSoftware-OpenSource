@@ -43,4 +43,9 @@ public class DistrictServiceImpl implements IDistrictService {
     public District findByName(String name) throws Exception {
         return districtRepository.findByName(name);
     }
+
+    @Override
+    public List<District> findByIDCity(Long id) throws Exception {
+        return districtRepository.findByCity_Id(id);
+    }
 }
