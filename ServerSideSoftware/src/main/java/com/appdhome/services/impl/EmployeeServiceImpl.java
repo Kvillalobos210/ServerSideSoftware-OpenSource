@@ -65,4 +65,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employeeRepository.findByEmail(email);
     }
 
+    @Override
+    public Optional<Employee> findByIdAccount(Long id) throws Exception {
+        return employeeRepository.findByAccount_Id(id);
+    }
+
 }

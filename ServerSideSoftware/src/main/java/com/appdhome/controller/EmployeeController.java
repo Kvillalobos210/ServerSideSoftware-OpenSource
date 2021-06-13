@@ -76,6 +76,26 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping(value="searchByIdAccount/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value="Buscar trabajador por id de la cuenta", notes ="Método para encontrar un trabajador con su respectivo id de la cuenta" )
+    @ApiResponses({
+            @ApiResponse(code=201, message = "Trabajador encontrado"),
+            @ApiResponse(code =404,message ="Trabajador no encontrado")
+    })
+
+    public ResponseEntity<Employee> findByIdAccount(@PathVariable("id") Long id){
+        try{
+            Optional<Employee> employee= employeeService.findByIdAccount(id);
+            if(!employee.isPresent())
+                return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Employee>(employee.get(),HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
     @GetMapping(value= "/searchByDni/{dni}" , produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="Buscar trabajador por DNI", notes ="Método para encontrar un trabajador con su respectivo DNI" )
     @ApiResponses({

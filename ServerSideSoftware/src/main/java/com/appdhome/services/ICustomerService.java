@@ -11,4 +11,5 @@ public interface ICustomerService extends CrudService<Customer> {
     public List<Customer> findByFirstNameAndLastName(String firstname, String lastname) throws Exception;
     public Customer findByDni(String dni) throws Exception;
     public Optional<Customer> findByEmail(String email) throws  Exception;
+    public Optional<Customer> findByIdAccount(Long id) throws  Exception;
 }

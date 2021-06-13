@@ -70,6 +70,26 @@ public class CustomerController {
         }
     }
 
+    @GetMapping(value="searchByIdAccount/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value="Buscar cliente por id de la cuenta", notes ="Método para encontrar un cleinte con su respectivo id de la cuenta" )
+    @ApiResponses({
+            @ApiResponse(code=201, message = "Cliente encontrado"),
+            @ApiResponse(code =404,message ="Cliente no encontrado")
+    })
+
+    public ResponseEntity<Customer> findByIdAccount(@PathVariable("id") Long id){
+        try{
+            Optional<Customer> customer= customerService.findByIdAccount(id);
+            if(!customer.isPresent())
+                return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Customer>(customer.get(),HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<Customer>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
     @GetMapping(value = "/searchFirstname/{firstname}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Buscar cliente por su nombre", notes = "Método para encontrar clientes por su nombre")
     @ApiResponses({

@@ -62,4 +62,9 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.findByEmail(email);
     }
 
+    @Override
+    public Optional<Customer> findByIdAccount(Long id) throws Exception {
+        return customerRepository.findByAccount_Id(id);
+    }
+
 }
