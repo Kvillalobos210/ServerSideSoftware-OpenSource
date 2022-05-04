@@ -30,4 +30,6 @@ jobs:
       run: mvn -B compile
 
     - name: Build with Maven package
-      run: mvn -B package 
+      run: mvn -B package
+    - name: Build with Maven test
+      run: mvn -B test
