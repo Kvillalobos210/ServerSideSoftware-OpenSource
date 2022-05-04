@@ -25,7 +25,10 @@ jobs:
     
     - name: Build with Maven clean
       run: mvn -B clean
+      
     - name: Build with Maven compile
       run: mvn -B compile
+    - name: Build with Maven 
+      run: mvn test
     - name: Build with Maven package
       run: mvn -B package 
